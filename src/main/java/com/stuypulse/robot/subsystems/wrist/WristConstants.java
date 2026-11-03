@@ -11,6 +11,8 @@ import com.stuypulse.robot.util.talonfx.config.TalonFXConfig;
 interface WristConstants {
   public interface WristSettings {
     //TODO: FIGURE OUT NECESSARY CONSTANTS
+    double WRIST_STOW_ANGLE = 0.0;
+    double WRIST_DEPLOY_ANGLE = 0.0;
     double WRIST_GEAR_RATIO = 1.0;
     }
     public interface DeviceIDs {
@@ -45,7 +47,7 @@ interface WristConstants {
   }
 
   public interface WristMotorConfigs {
-    TalonFXConfig MOTOR_CONFIG = 
+    TalonFXConfig LEFT_MOTOR_CONFIG = 
       new TalonFXConfig()
         .withInvertedValue(InvertedValue.Clockwise_Positive)
         .withNeutralMode(NeutralModeValue.Brake)

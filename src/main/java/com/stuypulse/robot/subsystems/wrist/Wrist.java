@@ -94,4 +94,20 @@ public class Wrist extends PeriodicSubsystem {
     public void periodicAfterScheduler() {
         io.applyOutputs(outputs);
     }
+
+    public Command deploy() {
+        return setPitchState(WristPitchState.DEPLOY);
+    }
+
+    public Command stow() {
+        return setPitchState(WristPitchState.STOW);
+    }
+
+    public Command rotate() {
+        return setRollState(WristRollState.ROTATE);
+    }
+
+    public Command neutralRoll() {
+        return setRollState(WristRollState.NEUTRAL);
+    }
 }

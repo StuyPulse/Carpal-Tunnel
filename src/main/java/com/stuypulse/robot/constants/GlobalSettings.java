@@ -21,6 +21,7 @@ public interface GlobalSettings {
      */
     interface EnabledSubsystems {
         LoggedNetworkBoolean VISION = new LoggedNetworkBoolean("/Tuning/Enabled Subsystems/Vision");
+        LoggedNetworkBoolean WRIST = new LoggedNetworkBoolean("/Tuning/Enabled Subsystems/Wrist");
     }
 
     /** What mode the robot is in when running a simulation. */

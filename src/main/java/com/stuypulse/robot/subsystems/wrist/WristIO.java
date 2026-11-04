@@ -37,8 +37,11 @@ public interface WristIO {
     @AutoLogOutput(key = "Wrist/Output Mode")
     public WristIOOutputMode wristMode = WristIOOutputMode.POSITION;
 
-    @AutoLogOutput(key = "Wrist/Target Position")
-    public Angle wristTargetPosition = Degrees.zero();
+    @AutoLogOutput(key = "Wrist/Target Pitch")
+    public Angle wristTargetPitch = Degrees.zero();
+
+    @AutoLogOutput(key = "Wrist/Target Roll")
+    public Angle wristTargetRoll = Degrees.zero();
 
     @AutoLogOutput(key = "Wrist/Target Voltage")
     public Voltage wristTargetVoltage = Volts.zero();

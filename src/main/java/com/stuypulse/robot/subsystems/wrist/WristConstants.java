@@ -1,6 +1,9 @@
 package com.stuypulse.robot.subsystems.wrist;
 
+import static org.wpilib.units.Units.Degrees;
+
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
+import org.wpilib.units.measure.Angle;
 
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -11,11 +14,11 @@ import com.stuypulse.robot.util.talonfx.config.TalonFXConfig;
 interface WristConstants {
   public interface WristSettings {
     //TODO: FIGURE OUT NECESSARY CONSTANTS
-    double WRIST_STOW_ANGLE = 0.0;
-    double WRIST_DEPLOY_ANGLE = 0.0;
-    double WRIST_ROTATE_ANGLE = 0.0;
-    double WRIST_NEUTRAL_ROLL = 0.0;
-    double WRIST_GEAR_RATIO = 1.0;
+    Angle WRIST_STOW_ANGLE = Degrees.of(0.0);
+    Angle WRIST_DEPLOY_ANGLE = Degrees.of(0.0);
+    Angle WRIST_ROTATE_ANGLE = Degrees.of(0.0);
+    Angle WRIST_NEUTRAL_ROLL = Degrees.of(0.0);
+    Angle WRIST_GEAR_RATIO = Degrees.of(0.0);
     }
     public interface DeviceIDs {
       int LEFT_MOTOR = 1;

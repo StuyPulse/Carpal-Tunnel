@@ -19,4 +19,5 @@ public interface GlobalPorts {
         int DEBUGGER = 2;
     }
     CANBus CAN_S1 = new CANBus(CANPort.CAN_S1); 
+    CANBus CAN_S2 = new CANBus(CANPort.CAN_S2);
 }

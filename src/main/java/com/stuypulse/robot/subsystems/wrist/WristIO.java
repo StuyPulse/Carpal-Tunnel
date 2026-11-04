@@ -47,8 +47,11 @@ public interface WristIO {
         @AutoLogOutput(key = "Wrist/Target Roll")
         public Angle wristTargetRoll = Degrees.zero();
 
-        @AutoLogOutput(key = "Wrist/Target Voltage")
-        public Voltage wristTargetVoltage = Volts.zero();
+        @AutoLogOutput(key = "Wrist/Target Pitch Voltage")
+        public Voltage wristTargetPitchVoltage = Volts.zero();
+
+        @AutoLogOutput(key = "Wrist/Target Pitch Voltage")
+        public Voltage wristTargetRollVoltage = Volts.zero();
     }
 
     public default void applyOutputs(WristIOOutputs outputs) {}

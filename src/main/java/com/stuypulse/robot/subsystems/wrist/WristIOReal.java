@@ -1,5 +1,7 @@
 package com.stuypulse.robot.subsystems.wrist;
 
-public class WristIOTalonFX extends WristIOBase {
+public class WristIOReal extends WristIOBase {
+  public WristIOReal() {
 
+  }
 }

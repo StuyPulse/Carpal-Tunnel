@@ -5,7 +5,6 @@
 package com.stuypulse.robot.subsystems.wrist;
 
 import com.stuypulse.robot.constants.GlobalSettings;
-import com.stuypulse.robot.subsystems.wrist.Wrist.WristPitchState;
 import com.stuypulse.robot.subsystems.wrist.WristConstants.WristSettings;
 import com.stuypulse.robot.subsystems.wrist.WristIO.WristIOOutputMode;
 import com.stuypulse.robot.subsystems.wrist.WristIO.WristIOOutputs;

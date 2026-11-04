@@ -37,7 +37,7 @@ interface WristConstants {
                         SingleJointedArmSim.estimateMOI(
                                 WRIST_MASS.in(Kilograms), WRIST_ARM_LENGTH.in(Meters)));
 
-        double WRIST_GEAR_RATIO = 0.0;
+        double WRIST_GEAR_RATIO = 1.0;
     }
 
     public interface DeviceIDs {

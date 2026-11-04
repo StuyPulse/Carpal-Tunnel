@@ -5,11 +5,13 @@
 package com.stuypulse.robot.subsystems.wrist;
 
 import com.stuypulse.robot.constants.GlobalSettings;
+import com.stuypulse.robot.subsystems.wrist.Wrist.WristPitchState;
 import com.stuypulse.robot.subsystems.wrist.WristConstants.WristSettings;
 import com.stuypulse.robot.subsystems.wrist.WristIO.WristIOOutputMode;
 import com.stuypulse.robot.subsystems.wrist.WristIO.WristIOOutputs;
 import com.stuypulse.robot.util.PeriodicSubsystem;
 
+import org.wpilib.command3.Command;
 import org.wpilib.units.measure.Angle;
 
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -45,12 +47,12 @@ public class Wrist extends PeriodicSubsystem {
         this.rollState = WristRollState.NEUTRAL;
     }
 
-    private void setPitchState(WristPitchState state) {
-        this.pitchState = state;
+    private Command setPitchState(WristPitchState pitchState) {
+        return run(coroutine -> this.pitchState = pitchState).named(getName() + "Set" + pitchState.name());
     }
 
-    private void setRollState(WristRollState state) {
-        this.rollState = state;
+    private Command setRollState(WristRollState rollState) {
+        return run(coroutine -> this.rollState = rollState).named(getName() + "Set" + rollState.name());
     }
 
     private void runWristPosition(Angle pitch, Angle roll) {

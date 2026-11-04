@@ -18,7 +18,7 @@ interface WristConstants {
     Angle WRIST_DEPLOY_ANGLE = Degrees.of(0.0);
     Angle WRIST_ROTATE_ANGLE = Degrees.of(0.0);
     Angle WRIST_NEUTRAL_ROLL = Degrees.of(0.0);
-    Angle WRIST_GEAR_RATIO = Degrees.of(0.0);
+    double WRIST_GEAR_RATIO = 0.0;
     }
     public interface DeviceIDs {
       int LEFT_MOTOR = 1;

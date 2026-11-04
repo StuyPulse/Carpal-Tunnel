@@ -3,7 +3,11 @@ package com.stuypulse.robot.subsystems.wrist;
 import static org.wpilib.units.Units.Degrees;
 
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
+import org.wpilib.simulation.SingleJointedArmSim;
 import org.wpilib.units.measure.Angle;
+import org.wpilib.units.measure.Distance;
+import org.wpilib.units.measure.Mass;
+import org.wpilib.units.measure.MomentOfInertia;
 
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -18,8 +22,20 @@ interface WristConstants {
     Angle WRIST_DEPLOY_ANGLE = Degrees.of(0.0);
     Angle WRIST_ROTATE_ANGLE = Degrees.of(0.0);
     Angle WRIST_NEUTRAL_ROLL = Degrees.of(0.0);
+
+    //SIM
+	  Angle WRIST_PITCH_MIN_ANGLE = Degrees.of(0.0);
+	  Angle WRIST_ROLL_MAX_ANGLE = Degrees.of(0.0);
+	  Angle WRIST_PITCH_MAX_ANGLE = Degrees.of(0.0);
+    Distance WRIST_ARM_LENGTH = Meters.of(0.0);
+    Mass WRIST_MASS = Kilograms.of(0.0);
+	  MomentOfInertia WRIST_MOI = KilogramSquareMeters.of(
+      SingleJointedArmSim
+        WRIST_MASS.in(Kilograms), 
+        WRIST_ARM_LENGTH.in(Meters)));
+
     double WRIST_GEAR_RATIO = 0.0;
-    }
+  }
     public interface DeviceIDs {
       int LEFT_MOTOR = 1;
       int RIGHT_MOTOR = 2;

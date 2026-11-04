@@ -13,6 +13,8 @@ interface WristConstants {
     //TODO: FIGURE OUT NECESSARY CONSTANTS
     double WRIST_STOW_ANGLE = 0.0;
     double WRIST_DEPLOY_ANGLE = 0.0;
+    double WRIST_ROTATE_ANGLE = 0.0;
+    double WRIST_NEUTRAL_ROLL = 0.0;
     double WRIST_GEAR_RATIO = 1.0;
     }
     public interface DeviceIDs {

@@ -31,10 +31,10 @@ public class Wrist extends PeriodicSubsystem {
     }
 
     @AutoLogOutput(key = "Wrist/PitchState")
-    private WristPitchState pitchState = WristPitchState.STOW;
+    private WristPitchState pitchState;
 
     @AutoLogOutput(key = "Wrist/RollState")
-    private WristRollState rollState = WristRollState.NEUTRAL;
+    private WristRollState rollState;
 
     public Wrist(WristIO io) {
         this.io = io;

@@ -13,6 +13,8 @@ import com.stuypulse.robot.util.PeriodicSubsystem;
 import org.wpilib.command3.Command;
 import org.wpilib.units.measure.Angle;
 
+import static org.wpilib.units.Units.Degrees;
+
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -64,6 +66,22 @@ public class Wrist extends PeriodicSubsystem {
         outputs.wristMode = WristIOOutputMode.STOP;
     }
 
+    private Angle getRollDelta(Angle target, Angle current) {
+    double delta = Math.IEEEremainder(target.minus(current).in(Degrees), 360.0);
+
+    double min = WristSettings.ROLL_MIN.in(Degrees);
+    double max = WristSettings.ROLL_MAX.in(Degrees);
+    double currentDeg = current.in(Degrees);
+
+    if (currentDeg + delta > max) {
+        delta -= 360;
+    } else if (currentDeg + delta < min) {
+        delta += 360;
+    }
+
+    return current.plus(Degrees.of(delta));
+}
+
     @Override
     public void periodic() {
         io.updateInputs(inputs);
@@ -86,7 +104,13 @@ public class Wrist extends PeriodicSubsystem {
                     case ROTATE -> WristSettings.WRIST_ROTATE_ANGLE;
                 };
 
-        runWristPosition(pitch, roll);
+        // roll = (L - R) / 2, matching the pitch +/- roll mixing in the IO layer
+        Angle measuredRoll =
+        inputs.motorLeftInputs.position
+                .minus(inputs.motorRightInputs.position)
+                .div(2.0);
+
+        runWristPosition(pitch, getRollDelta(roll, measuredRoll));
     }
 
     @Override

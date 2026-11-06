@@ -22,9 +22,13 @@ interface WristConstants {
     public interface WristSettings {
         // TODO: FIGURE OUT NECESSARY CONSTANTS
         Angle WRIST_STOW_ANGLE = Degrees.of(0.0);
-        Angle WRIST_DEPLOY_ANGLE = Degrees.of(0.0);
-        Angle WRIST_ROTATE_ANGLE = Degrees.of(0.0);
+        Angle WRIST_DEPLOY_ANGLE = Degrees.of(90.0);
+        
         Angle WRIST_NEUTRAL_ROLL = Degrees.of(0.0);
+        Angle WRIST_ROTATE_ANGLE = Degrees.of(90.0);
+
+        Angle ROLL_MIN = Degrees.of(-180.0);
+        Angle ROLL_MAX = Degrees.of(180.0);
 
         // SIM
         Angle WRIST_PITCH_MIN_ANGLE = Degrees.of(0.0);

@@ -10,7 +10,10 @@ import com.stuypulse.robot.subsystems.wrist.WristIO.WristIOOutputMode;
 import com.stuypulse.robot.subsystems.wrist.WristIO.WristIOOutputs;
 import com.stuypulse.robot.util.PeriodicSubsystem;
 
+import org.wpilib.command3.Command;
 import org.wpilib.units.measure.Angle;
+
+import static org.wpilib.units.Units.Degrees;
 
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -31,10 +34,10 @@ public class Wrist extends PeriodicSubsystem {
     }
 
     @AutoLogOutput(key = "Wrist/PitchState")
-    private WristPitchState pitchState = WristPitchState.STOW;
+    private WristPitchState pitchState;
 
     @AutoLogOutput(key = "Wrist/RollState")
-    private WristRollState rollState = WristRollState.NEUTRAL;
+    private WristRollState rollState;
 
     public Wrist(WristIO io) {
         this.io = io;
@@ -45,12 +48,12 @@ public class Wrist extends PeriodicSubsystem {
         this.rollState = WristRollState.NEUTRAL;
     }
 
-    private void setPitchState(WristPitchState state) {
-        this.pitchState = state;
+    private Command setPitchState(WristPitchState pitchState) {
+        return run(coroutine -> this.pitchState = pitchState).named(getName() + "Set" + pitchState.name());
     }
 
-    private void setRollState(WristRollState state) {
-        this.rollState = state;
+    private Command setRollState(WristRollState rollState) {
+        return run(coroutine -> this.rollState = rollState).named(getName() + "Set" + rollState.name());
     }
 
     private void runWristPosition(Angle pitch, Angle roll) {
@@ -62,6 +65,22 @@ public class Wrist extends PeriodicSubsystem {
     private void stopWristMotor() {
         outputs.wristMode = WristIOOutputMode.STOP;
     }
+
+    private Angle getRollDelta(Angle target, Angle current) {
+    double delta = Math.IEEEremainder(target.minus(current).in(Degrees), 360.0);
+
+    double min = WristSettings.ROLL_MIN.in(Degrees);
+    double max = WristSettings.ROLL_MAX.in(Degrees);
+    double currentDeg = current.in(Degrees);
+
+    if (currentDeg + delta > max) {
+        delta -= 360;
+    } else if (currentDeg + delta < min) {
+        delta += 360;
+    }
+
+    return current.plus(Degrees.of(delta));
+}
 
     @Override
     public void periodic() {
@@ -85,11 +104,33 @@ public class Wrist extends PeriodicSubsystem {
                     case ROTATE -> WristSettings.WRIST_ROTATE_ANGLE;
                 };
 
-        runWristPosition(pitch, roll);
+        // roll = (L - R) / 2, matching the pitch +/- roll mixing in the IO layer
+        Angle measuredRoll =
+        inputs.motorLeftInputs.position
+                .minus(inputs.motorRightInputs.position)
+                .div(2.0);
+
+        runWristPosition(pitch, getRollDelta(roll, measuredRoll));
     }
 
     @Override
     public void periodicAfterScheduler() {
         io.applyOutputs(outputs);
+    }
+
+    public Command deploy() {
+        return setPitchState(WristPitchState.DEPLOY);
+    }
+
+    public Command stow() {
+        return setPitchState(WristPitchState.STOW);
+    }
+
+    public Command rotate() {
+        return setRollState(WristRollState.ROTATE);
+    }
+
+    public Command neutralRoll() {
+        return setRollState(WristRollState.NEUTRAL);
     }
 }

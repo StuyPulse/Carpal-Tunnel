@@ -16,7 +16,8 @@ import org.littletonrobotics.junction.AutoLogOutput;
 public interface WristIO {
     @AutoLog
     public static class WristIOInputs {
-        public TalonFXInputs motorInputs = new TalonFXInputs();
+        public TalonFXInputs motorLeftInputs = new TalonFXInputs();
+        public TalonFXInputs motorRightInputs = new TalonFXInputs();
     }
 
     public static enum WristIOOutputMode {
@@ -43,6 +44,6 @@ public interface WristIO {
     }
 
     public default void applyOutputs(WristIOOutputs outputs) {}
-    public default void updateInputs(WristIOInputs inputs) {}
+        public default void updateInputs(WristIOInputs inputs) {}
 
 }

@@ -36,8 +36,8 @@ public abstract class WristIOBase implements WristIO {
 
     @Override
     public void updateInputs(WristIOInputs inputs) {
-        motorLeft.updateInputs(inputs.motorInputs);
-        motorRight.updateInputs(inputs.motorInputs);
+        motorLeft.updateInputs(inputs.motorLeftInputs);
+        motorRight.updateInputs(inputs.motorRightInputs);
     }
 
     @Override

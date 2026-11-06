@@ -8,28 +8,16 @@ import static org.wpilib.units.Units.*;
 
 import org.wpilib.units.measure.*;
 
+import com.stuypulse.robot.util.talonfx.logged.TalonFXInputs;
+
 import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.AutoLogOutput;
 
 public interface WristIO {
     @AutoLog
     public static class WristIOInputs {
-        public Current leftMotorSupplyCurrent = Amps.zero();
-        public Current leftMotorStatorCurrent = Amps.zero();
-        public Temperature leftMotorTemperature = Celsius.zero();
-        public Angle leftMotorPosition = Degrees.zero();
-        public Voltage leftMotorAppliedVoltage = Volts.zero();
-        public AngularVelocity leftMotorVelocity = DegreesPerSecond.zero();
-
-        public Current rightMotorSupplyCurrent = Amps.zero();
-        public Current rightMotorStatorCurrent = Amps.zero();
-        public Temperature rightMotorTemperature = Celsius.zero();
-        public Angle rightMotorPosition = Degrees.zero();
-        public Voltage rightMotorAppliedVoltage = Volts.zero();
-        public AngularVelocity rightMotorVelocity = DegreesPerSecond.zero();
+        public TalonFXInputs motorInputs = new TalonFXInputs();
     }
-
-    public default void updateInputs(WristIOInputs inputs) {}
 
     public static enum WristIOOutputMode {
         POSITION,
@@ -55,4 +43,6 @@ public interface WristIO {
     }
 
     public default void applyOutputs(WristIOOutputs outputs) {}
+    public default void updateInputs(WristIOInputs inputs) {}
+
 }

@@ -81,7 +81,15 @@ public class RobotContainer {
     /*** BUTTONS ***/
     /***************/
 
-    private void configureButtonBindings() {}
+    private void configureButtonBindings() {
+        driver.a().onTrue(wrist.deploy());
+
+        driver.y().onTrue(wrist.stow());
+    
+        driver.b().onTrue(wrist.rotate());
+
+        driver.x().onTrue(wrist.neutralRoll());
+    }
 
     /**************/
     /*** AUTONS ***/

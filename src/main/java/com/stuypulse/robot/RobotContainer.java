@@ -36,8 +36,8 @@ public class RobotContainer {
     // public final CommandGamepad operator = new CommandGamepad(GlobalPorts.Gamepad.OPERATOR);
 
     // Subsystems
-    private final Swerve swerve;
-    private final Vision vision;
+    // private final Swerve swerve;
+    // private final Vision vision;
     // Autons
     private LoggedNetworkChooser<Auton> autonChooser = new LoggedNetworkChooser<>("Auton");
 
@@ -47,48 +47,17 @@ public class RobotContainer {
         EnumMap<Camera, VisionIO> visionIOMap = new EnumMap<>(Camera.class);
         switch (GlobalSettings.CURRENT_MODE) {
             case REAL -> {
-                swerve =
-                        new Swerve(
-                                new GyroIOPigeon2(),
-                                new ModuleIOTalonFX(TunerConstants.FrontLeft),
-                                new ModuleIOTalonFX(TunerConstants.FrontRight),
-                                new ModuleIOTalonFX(TunerConstants.BackLeft),
-                                new ModuleIOTalonFX(TunerConstants.BackRight));
-                for (Camera camera : VisionConstants.Camera.values()) {
-                    visionIOMap.put(
-                            camera,
-                            new VisionIOLimelight(
-                                    camera.name(), camera.getRobotToCamera(), swerve::getRotation));
-                }
+                
             }
 
             case SIM -> {
-                swerve =
-                        new Swerve(
-                                new GyroIO() {},
-                                new ModuleIOSim(TunerConstants.FrontLeft),
-                                new ModuleIOSim(TunerConstants.FrontRight),
-                                new ModuleIOSim(TunerConstants.BackLeft),
-                                new ModuleIOSim(TunerConstants.BackRight));
-                for (Camera camera : Camera.values()) {
-                    visionIOMap.put(camera, new VisionIO() {});
-                }
+                
             }
 
             default -> {
-                swerve =
-                        new Swerve(
-                                new GyroIO() {},
-                                new ModuleIO() {},
-                                new ModuleIO() {},
-                                new ModuleIO() {},
-                                new ModuleIO() {});
-                for (Camera camera : Camera.values()) {
-                    visionIOMap.put(camera, new VisionIO() {});
-                }
+                
             }
         }
-        vision = new Vision(swerve.visionConsumer, visionIOMap);
 
         configureLogging();
         configureDefaultCommands();

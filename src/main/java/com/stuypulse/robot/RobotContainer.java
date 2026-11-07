@@ -21,6 +21,10 @@ import com.stuypulse.robot.subsystems.vision.VisionConstants;
 import com.stuypulse.robot.subsystems.vision.VisionConstants.Camera;
 import com.stuypulse.robot.subsystems.vision.VisionIO;
 import com.stuypulse.robot.subsystems.vision.VisionIOLimelight;
+import com.stuypulse.robot.subsystems.wrist.Wrist;
+import com.stuypulse.robot.subsystems.wrist.WristIO;
+import com.stuypulse.robot.subsystems.wrist.WristIOReal;
+import com.stuypulse.robot.subsystems.wrist.WristIOSim;
 
 import org.wpilib.command3.button.CommandGamepad;
 import org.wpilib.tunable.Tunables;
@@ -38,25 +42,19 @@ public class RobotContainer {
     // Subsystems
     // private final Swerve swerve;
     // private final Vision vision;
+    private final Wrist wrist;
     // Autons
     private LoggedNetworkChooser<Auton> autonChooser = new LoggedNetworkChooser<>("Auton");
 
     // Robot container
 
     public RobotContainer() {
-        EnumMap<Camera, VisionIO> visionIOMap = new EnumMap<>(Camera.class);
         switch (GlobalSettings.CURRENT_MODE) {
-            case REAL -> {
-                
-            }
+            case REAL -> wrist = new Wrist(new WristIOReal());              
 
-            case SIM -> {
-                
-            }
+            case SIM -> wrist = new Wrist(new WristIOSim());
 
-            default -> {
-                
-            }
+            default -> wrist = new Wrist(new WristIO() {});
         }
 
         configureLogging();

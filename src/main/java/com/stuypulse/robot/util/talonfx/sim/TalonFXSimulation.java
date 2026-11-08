@@ -1,18 +1,17 @@
-/************************ PROJECT ZIXI ************************/
-/* Copyright (c) 2026 StuyPulse Robotics. All rights reserved.*/
-/* This work is licensed under the terms of the MIT license.  */
-/**************************************************************/
+/************************* PROJECT HIGHGROUND *************************/
+/* Copyright (c) 2026 StuyPulse Robotics. All rights reserved. */
+/* Use of this source code is governed by an MIT-style license */
+/* that can be found in the repository LICENSE file.           */
+/***************************************************************/
 package com.stuypulse.robot.util.talonfx.sim;
-
-import com.stuypulse.robot.util.talonfx.config.TalonFXConfig;
-import com.stuypulse.robot.util.talonfx.logged.LoggedTalonFX;
-
-import org.wpilib.system.RobotController;
-import org.wpilib.units.measure.*;
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.sim.TalonFXSimState;
+import com.stuypulse.robot.util.talonfx.config.TalonFXConfig;
+import com.stuypulse.robot.util.talonfx.logged.LoggedTalonFX;
+import edu.wpi.first.units.measure.*;
+import edu.wpi.first.wpilibj.RobotController;
 
 /**
  *

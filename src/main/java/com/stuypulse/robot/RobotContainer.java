@@ -1,7 +1,8 @@
-/************************ PROJECT ZIXI ************************/
-/* Copyright (c) 2026 StuyPulse Robotics. All rights reserved.*/
-/* This work is licensed under the terms of the MIT license.  */
-/**************************************************************/
+/************************* PROJECT HIGHGROUND *************************/
+/* Copyright (c) 2026 StuyPulse Robotics. All rights reserved. */
+/* Use of this source code is governed by an MIT-style license */
+/* that can be found in the repository LICENSE file.           */
+/***************************************************************/
 package com.stuypulse.robot;
 
 import com.stuypulse.robot.commands.auton.Auton;
@@ -9,93 +10,40 @@ import com.stuypulse.robot.commands.auton.AutonFactory;
 import com.stuypulse.robot.constants.FieldConstants;
 import com.stuypulse.robot.constants.GlobalPorts;
 import com.stuypulse.robot.constants.GlobalSettings;
-import com.stuypulse.robot.generated.TunerConstants;
-import com.stuypulse.robot.subsystems.swerve.GyroIO;
-import com.stuypulse.robot.subsystems.swerve.GyroIOPigeon2;
-import com.stuypulse.robot.subsystems.swerve.ModuleIO;
-import com.stuypulse.robot.subsystems.swerve.ModuleIOSim;
-import com.stuypulse.robot.subsystems.swerve.ModuleIOTalonFX;
-import com.stuypulse.robot.subsystems.swerve.Swerve;
-import com.stuypulse.robot.subsystems.vision.Vision;
-import com.stuypulse.robot.subsystems.vision.VisionConstants;
-import com.stuypulse.robot.subsystems.vision.VisionConstants.Camera;
-import com.stuypulse.robot.subsystems.vision.VisionIO;
-import com.stuypulse.robot.subsystems.vision.VisionIOLimelight;
-
-import org.wpilib.command3.button.CommandGamepad;
-import org.wpilib.tunable.Tunables;
-
-import java.util.EnumMap;
-import org.littletonrobotics.junction.networktables.LoggedNetworkChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 public class RobotContainer {
 
     // Gamepads
-    public final CommandGamepad driver =
-            new CommandGamepad(GlobalPorts.Gamepad.DRIVER); // model-agnostic controller
+    public final CommandXboxController driver =
+            new CommandXboxController(GlobalPorts.Gamepad.DRIVER); // model-agnostic controller
     // public final CommandGamepad operator = new CommandGamepad(GlobalPorts.Gamepad.OPERATOR);
 
     // Subsystems
-    private final Swerve swerve;
-    private final Vision vision;
+    private final Elevator elevator;
+
     // Autons
-    private LoggedNetworkChooser<Auton> autonChooser = new LoggedNetworkChooser<>("Auton");
+    private LoggedDashboardChooser<Auton> autonChooser = new LoggedDashboardChooser<>("Auton");
 
     // Robot container
 
     public RobotContainer() {
-        EnumMap<Camera, VisionIO> visionIOMap = new EnumMap<>(Camera.class);
         switch (GlobalSettings.CURRENT_MODE) {
-            case REAL -> {
-                swerve =
-                        new Swerve(
-                                new GyroIOPigeon2(),
-                                new ModuleIOTalonFX(TunerConstants.FrontLeft),
-                                new ModuleIOTalonFX(TunerConstants.FrontRight),
-                                new ModuleIOTalonFX(TunerConstants.BackLeft),
-                                new ModuleIOTalonFX(TunerConstants.BackRight));
-                for (Camera camera : VisionConstants.Camera.values()) {
-                    visionIOMap.put(
-                            camera,
-                            new VisionIOLimelight(
-                                    camera.name(), camera.getRobotToCamera(), swerve::getRotation));
-                }
-            }
+            case REAL -> 
 
-            case SIM -> {
-                swerve =
-                        new Swerve(
-                                new GyroIO() {},
-                                new ModuleIOSim(TunerConstants.FrontLeft),
-                                new ModuleIOSim(TunerConstants.FrontRight),
-                                new ModuleIOSim(TunerConstants.BackLeft),
-                                new ModuleIOSim(TunerConstants.BackRight));
-                for (Camera camera : Camera.values()) {
-                    visionIOMap.put(camera, new VisionIO() {});
-                }
-            }
+            case SIM -> 
 
-            default -> {
-                swerve =
-                        new Swerve(
-                                new GyroIO() {},
-                                new ModuleIO() {},
-                                new ModuleIO() {},
-                                new ModuleIO() {},
-                                new ModuleIO() {});
-                for (Camera camera : Camera.values()) {
-                    visionIOMap.put(camera, new VisionIO() {});
-                }
-            }
+            default -> 
         }
-        vision = new Vision(swerve.visionConsumer, visionIOMap);
 
         configureLogging();
         configureDefaultCommands();
         configureButtonBindings();
         configureAutons();
 
-        Tunables.publish("Field", FieldConstants.FIELD_2D);
+        SmartDashboard.putData("Field", FieldConstants.FIELD_2D);
     }
 
     /***************/
@@ -114,7 +62,15 @@ public class RobotContainer {
     /*** BUTTONS ***/
     /***************/
 
-    private void configureButtonBindings() {}
+    private void configureButtonBindings() {
+        driver.a().onTrue();
+
+        driver.y().onTrue();
+
+        driver.b().onTrue();
+
+        driver.x().onTrue();
+    }
 
     /**************/
     /*** AUTONS ***/
@@ -123,7 +79,7 @@ public class RobotContainer {
     public void configureAutons() {
         AutonFactory autonFactory = new AutonFactory();
 
-        autonChooser.addDefault("Do Nothing", autonFactory.doNothingAuton());
+        autonChooser.addOption("Do Nothing", autonFactory.doNothingAuton());
     }
 
     /**
@@ -132,6 +88,6 @@ public class RobotContainer {
      * @return The command to run in autonomous
      */
     public Auton getAutonomousCommand() {
-        return autonChooser.getSelected();
+        return autonChooser.get();
     }
 }

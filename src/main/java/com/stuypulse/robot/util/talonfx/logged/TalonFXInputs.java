@@ -1,13 +1,13 @@
-/************************ PROJECT ZIXI ************************/
-/* Copyright (c) 2026 StuyPulse Robotics. All rights reserved.*/
-/* This work is licensed under the terms of the MIT license.  */
-/**************************************************************/
+/************************* PROJECT HIGHGROUND *************************/
+/* Copyright (c) 2026 StuyPulse Robotics. All rights reserved. */
+/* Use of this source code is governed by an MIT-style license */
+/* that can be found in the repository LICENSE file.           */
+/***************************************************************/
 package com.stuypulse.robot.util.talonfx.logged;
 
-import static org.wpilib.units.Units.*;
+import static edu.wpi.first.units.Units.*;
 
-import org.wpilib.units.measure.*;
-
+import edu.wpi.first.units.measure.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -52,8 +52,7 @@ public class TalonFXInputs implements LoggableInputs, Cloneable {
     /**
      * Records additional StatusSignals to be logged.
      *
-     * @param name The name of the signal to log.
-     * @param value The value of the signal to log.
+     * @param signals The signals to log.
      */
     void recordAdditionalSignal(String name, Object value) {
         this.additionalSignalValues.put(name, value);

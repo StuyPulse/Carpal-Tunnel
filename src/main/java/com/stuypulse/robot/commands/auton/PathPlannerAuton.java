@@ -7,7 +7,8 @@ package com.stuypulse.robot.commands.auton;
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.FieldConstants;
 
-import org.wpilib.command3.Command;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 
 import com.pathplanner.lib.path.PathPlannerPath;
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class PathPlannerAuton implements Auton {
             subPaths.add(path);
         }
 
-        this.command = Command.sequence(commands).named(name);
+        this.command = Commands.sequence(commands);
     }
 
     @Override
@@ -45,8 +46,7 @@ public class PathPlannerAuton implements Auton {
                 FieldConstants.FIELD_2D
                         .getObject("path: " + subPaths.get(i).name)
                         .setPoses(
-                                FieldConstants.transformToOppositeAlliance(
-                                        subPaths.get(i).getPathPoses()));
+                                FieldConstants.transformToOppositeAlliance(subPaths.get(i).getPathPoses()));
             }
         }
     }

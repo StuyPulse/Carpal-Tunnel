@@ -1,19 +1,22 @@
-/************************ PROJECT ZIXI ************************/
-/* Copyright (c) 2026 StuyPulse Robotics. All rights reserved.*/
-/* This work is licensed under the terms of the MIT license.  */
-/**************************************************************/
+/************************* PROJECT HIGHGROUND *************************/
+/* Copyright (c) 2026 StuyPulse Robotics. All rights reserved. */
+/* Use of this source code is governed by an MIT-style license */
+/* that can be found in the repository LICENSE file.           */
+/***************************************************************/
 package com.stuypulse.robot;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stuypulse.robot.commands.auton.Auton;
 import com.stuypulse.robot.constants.GlobalSettings;
-import com.stuypulse.robot.generated.BuildConstants;
-import com.stuypulse.robot.util.PeriodicSubsystem;
-
-import org.wpilib.command3.Scheduler;
-import org.wpilib.driverstation.Alliance;
-import org.wpilib.driverstation.MatchState;
-import org.wpilib.util.Alert;
-
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Optional;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -34,7 +37,7 @@ public class Robot extends LoggedRobot {
             new Alert(
                     "MissingAllianceWarning",
                     "Alliance optional has no value present",
-                    Alert.Level.MEDIUM);
+                    AlertType.kWarning);
 
     /**
      * Checks the alliance the robot is on
@@ -43,10 +46,10 @@ public class Robot extends LoggedRobot {
      *     and false if alliance cannot be determined.
      */
     public static boolean isBlue() {
-        final Optional<Alliance> alliance = MatchState.getAlliance();
+        final Optional<Alliance> alliance = DriverStation.getAlliance();
         if (alliance.isPresent()) {
             allianceMissing.set(false);
-            return alliance.get() == Alliance.BLUE;
+            return alliance.get() == Alliance.Blue;
         } else {
             allianceMissing.set(true);
         }
@@ -54,14 +57,13 @@ public class Robot extends LoggedRobot {
     }
 
     private final RobotContainer robot;
-    private final Scheduler defaultScheduler;
+    private final CommandScheduler defaultScheduler;
     private Auton auto;
 
     public Robot() {
         robot = new RobotContainer();
-        defaultScheduler = Scheduler.getDefault();
+        defaultScheduler = CommandScheduler.getInstance();
 
-        logGitInfo();
         switch (GlobalSettings.CURRENT_MODE) {
             case REAL -> {
                 // Running on a real robot, log to a USB stick ("/U/logs")
@@ -84,34 +86,33 @@ public class Robot extends LoggedRobot {
             }
         }
 
+        logCommitHash();
         Logger.start();
     }
 
-    private void logGitInfo() {
-        Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
-        Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
-        Logger.recordMetadata("GitCommitMessage", BuildConstants.GIT_MESSAGE);
-        if (!BuildConstants.GIT_LINK.isBlank()) {
-            Logger.recordMetadata("GitCommitLink", BuildConstants.GIT_LINK);
+    private void logCommitHash() {
+        Path commitFile = Filesystem.getDeployDirectory().toPath().resolve("commit.json");
+
+        try {
+            if (Files.exists(commitFile)) {
+                ObjectMapper json = new ObjectMapper();
+                JsonNode object = json.readTree(commitFile.toFile());
+
+                String hash = object.path("hash").asText("unknown");
+                String message = object.path("message").asText("unknown");
+                String description = object.path("description").asText("");
+
+                Logger.recordMetadata("Commit Hash", hash);
+                Logger.recordMetadata("Commit Message", message);
+                if (!description.isBlank()) {
+                    Logger.recordMetadata("Commit Description", description);
+                }
+            } else {
+                Logger.recordMetadata("Commit", "commit.json file missing");
+            }
+        } catch (Exception e) {
+            Logger.recordMetadata("Commit", "JSON parse failed: " + e);
         }
-        Logger.recordMetadata(
-                "GitPushStatus",
-                switch (BuildConstants.GIT_PUSH_STATUS) {
-                    case "PUSHED" -> "Commit pushed to remote repository";
-                    case "NOT_PUSHED" -> "Local commit not pushed to remote repository";
-                    case "STALE" -> "Could not verify push status. Cached information may be stale";
-                    default -> "Unable to determine commit push status";
-                });
-        Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
-        Logger.recordMetadata("GitDate", BuildConstants.GIT_DATE);
-        Logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH);
-        Logger.recordMetadata(
-                "GitDirty",
-                switch (BuildConstants.DIRTY) {
-                    case 0 -> "All changes committed";
-                    case 1 -> "Uncommitted changes";
-                    default -> "Unknown";
-                });
     }
 
     /*************************/
@@ -121,7 +122,6 @@ public class Robot extends LoggedRobot {
     @Override
     public void robotPeriodic() {
         defaultScheduler.run();
-        PeriodicSubsystem.runAllPeriodicAfterScheduler();
     }
 
     /*********************/
@@ -195,13 +195,13 @@ public class Robot extends LoggedRobot {
     /*************************/
 
     @Override
-    public void utilityInit() {
+    public void testInit() {
         defaultScheduler.cancelAll();
     }
 
     @Override
-    public void utilityPeriodic() {}
+    public void testPeriodic() {}
 
     @Override
-    public void utilityExit() {}
+    public void testExit() {}
 }

@@ -52,10 +52,14 @@ public abstract class WristIOBase implements WristIO {
             }
 
             case VOLTAGE -> {
-                motorLeft.setControl(leftVoltageController.withOutput(
-                    outputs.wristTargetPitchVoltage.plus(outputs.wristTargetRollVoltage)));
-                motorRight.setControl(rightVoltageController.withOutput(
-                    outputs.wristTargetPitchVoltage.minus(outputs.wristTargetRollVoltage)));
+                motorLeft.setControl(
+                        leftVoltageController.withOutput(
+                                outputs.wristTargetPitchVoltage.plus(
+                                        outputs.wristTargetRollVoltage)));
+                motorRight.setControl(
+                        rightVoltageController.withOutput(
+                                outputs.wristTargetPitchVoltage.minus(
+                                        outputs.wristTargetRollVoltage)));
             }
 
             case STOP -> {

@@ -6,9 +6,9 @@ package com.stuypulse.robot.subsystems.wrist;
 
 import static org.wpilib.units.Units.*;
 
-import org.wpilib.units.measure.*;
-
 import com.stuypulse.robot.util.talonfx.logged.TalonFXInputs;
+
+import org.wpilib.units.measure.*;
 
 import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -44,6 +44,6 @@ public interface WristIO {
     }
 
     public default void applyOutputs(WristIOOutputs outputs) {}
-        public default void updateInputs(WristIOInputs inputs) {}
 
+    public default void updateInputs(WristIOInputs inputs) {}
 }

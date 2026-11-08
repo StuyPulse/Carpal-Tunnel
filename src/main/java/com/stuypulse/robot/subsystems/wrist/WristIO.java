@@ -1,15 +1,14 @@
-/************************ PROJECT ZIXI ************************/
-/* Copyright (c) 2026 StuyPulse Robotics. All rights reserved.*/
-/* This work is licensed under the terms of the MIT license.  */
-/**************************************************************/
+/********************** PROJECT HIGHGROUND **********************/
+/* Copyright (c) 2026 StuyPulse Robotics. All rights reserved. */
+/* Use of this source code is governed by an MIT-style license */
+/* that can be found in the repository LICENSE file.           */
+/***************************************************************/
 package com.stuypulse.robot.subsystems.wrist;
 
-import static org.wpilib.units.Units.*;
+import static edu.wpi.first.units.Units.*;
 
 import com.stuypulse.robot.util.talonfx.logged.TalonFXInputs;
-
-import org.wpilib.units.measure.*;
-
+import edu.wpi.first.units.measure.*;
 import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.AutoLogOutput;
 

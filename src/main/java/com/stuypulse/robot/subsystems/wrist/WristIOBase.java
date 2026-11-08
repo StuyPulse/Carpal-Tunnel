@@ -1,19 +1,18 @@
-/************************ PROJECT ZIXI ************************/
-/* Copyright (c) 2026 StuyPulse Robotics. All rights reserved.*/
-/* This work is licensed under the terms of the MIT license.  */
-/**************************************************************/
+/********************** PROJECT HIGHGROUND **********************/
+/* Copyright (c) 2026 StuyPulse Robotics. All rights reserved. */
+/* Use of this source code is governed by an MIT-style license */
+/* that can be found in the repository LICENSE file.           */
+/***************************************************************/
 package com.stuypulse.robot.subsystems.wrist;
-
-import com.stuypulse.robot.subsystems.wrist.WristConstants.WristMotorConfigs;
-import com.stuypulse.robot.util.talonfx.logged.LoggedTalonFX;
-
-import org.wpilib.units.measure.Angle;
 
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
+import com.stuypulse.robot.subsystems.wrist.WristConstants.WristMotorConfigs;
+import com.stuypulse.robot.util.talonfx.logged.LoggedTalonFX;
+import edu.wpi.first.units.measure.Angle;
 
 public abstract class WristIOBase implements WristIO {
-    private final LoggedTalonFX motorLeft;
+    public final LoggedTalonFX motorLeft;
     private final LoggedTalonFX motorRight;
 
     private final PositionVoltage leftPositionController;

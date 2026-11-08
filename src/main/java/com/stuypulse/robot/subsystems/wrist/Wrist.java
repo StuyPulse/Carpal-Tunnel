@@ -1,20 +1,19 @@
-/************************ PROJECT ZIXI ************************/
-/* Copyright (c) 2026 StuyPulse Robotics. All rights reserved.*/
-/* This work is licensed under the terms of the MIT license.  */
-/**************************************************************/
+/********************** PROJECT HIGHGROUND **********************/
+/* Copyright (c) 2026 StuyPulse Robotics. All rights reserved. */
+/* Use of this source code is governed by an MIT-style license */
+/* that can be found in the repository LICENSE file.           */
+/***************************************************************/
 package com.stuypulse.robot.subsystems.wrist;
 
-import static org.wpilib.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Degrees;
 
 import com.stuypulse.robot.constants.GlobalSettings;
 import com.stuypulse.robot.subsystems.wrist.WristConstants.WristSettings;
 import com.stuypulse.robot.subsystems.wrist.WristIO.WristIOOutputMode;
 import com.stuypulse.robot.subsystems.wrist.WristIO.WristIOOutputs;
 import com.stuypulse.robot.util.PeriodicSubsystem;
-
-import org.wpilib.command3.Command;
-import org.wpilib.units.measure.Angle;
-
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj2.command.Command;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -48,14 +47,12 @@ public class Wrist extends PeriodicSubsystem {
         this.rollState = WristRollState.NEUTRAL;
     }
 
-    private Command setPitchState(WristPitchState pitchState) {
-        return run(coroutine -> this.pitchState = pitchState)
-                .named(getName() + "Set" + pitchState.name());
+    private void setPitchState(WristPitchState pitchState) {
+        this.pitchState = pitchState;
     }
 
-    private Command setRollState(WristRollState rollState) {
-        return run(coroutine -> this.rollState = rollState)
-                .named(getName() + "Set" + rollState.name());
+    private void setRollState(WristRollState rollState) {
+        this.rollState = rollState;
     }
 
     private void runWristPosition(Angle pitch, Angle roll) {
@@ -119,18 +116,18 @@ public class Wrist extends PeriodicSubsystem {
     }
 
     public Command deploy() {
-        return setPitchState(WristPitchState.DEPLOY);
+        return runOnce(() -> setPitchState(WristPitchState.DEPLOY));
     }
 
     public Command stow() {
-        return setPitchState(WristPitchState.STOW);
+        return runOnce(() -> setPitchState(WristPitchState.STOW));
     }
 
     public Command rotate() {
-        return setRollState(WristRollState.ROTATE);
+        return runOnce(() -> setRollState(WristRollState.ROTATE));
     }
 
     public Command neutralRoll() {
-        return setRollState(WristRollState.NEUTRAL);
+        return runOnce(() -> setRollState(WristRollState.NEUTRAL));
     }
 }

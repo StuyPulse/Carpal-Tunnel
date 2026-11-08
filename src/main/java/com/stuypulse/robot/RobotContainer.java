@@ -1,4 +1,4 @@
-/************************* PROJECT HIGHGROUND *************************/
+/********************** PROJECT HIGHGROUND **********************/
 /* Copyright (c) 2026 StuyPulse Robotics. All rights reserved. */
 /* Use of this source code is governed by an MIT-style license */
 /* that can be found in the repository LICENSE file.           */
@@ -10,6 +10,10 @@ import com.stuypulse.robot.commands.auton.AutonFactory;
 import com.stuypulse.robot.constants.FieldConstants;
 import com.stuypulse.robot.constants.GlobalPorts;
 import com.stuypulse.robot.constants.GlobalSettings;
+import com.stuypulse.robot.subsystems.wrist.Wrist;
+import com.stuypulse.robot.subsystems.wrist.WristIO;
+import com.stuypulse.robot.subsystems.wrist.WristIOReal;
+import com.stuypulse.robot.subsystems.wrist.WristIOSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
@@ -22,8 +26,7 @@ public class RobotContainer {
     // public final CommandGamepad operator = new CommandGamepad(GlobalPorts.Gamepad.OPERATOR);
 
     // Subsystems
-    private final Elevator elevator;
-
+    private final Wrist wrist;
     // Autons
     private LoggedDashboardChooser<Auton> autonChooser = new LoggedDashboardChooser<>("Auton");
 
@@ -31,11 +34,11 @@ public class RobotContainer {
 
     public RobotContainer() {
         switch (GlobalSettings.CURRENT_MODE) {
-            case REAL -> 
+            case REAL -> wrist = new Wrist(new WristIOReal());
 
-            case SIM -> 
+            case SIM -> wrist = new Wrist(new WristIOSim());
 
-            default -> 
+            default -> wrist = new Wrist(new WristIO() {});
         }
 
         configureLogging();
@@ -63,13 +66,13 @@ public class RobotContainer {
     /***************/
 
     private void configureButtonBindings() {
-        driver.a().onTrue();
+        driver.a().onTrue(wrist.deploy());
 
-        driver.y().onTrue();
+        driver.y().onTrue(wrist.stow());
 
-        driver.b().onTrue();
+        driver.b().onTrue(wrist.rotate());
 
-        driver.x().onTrue();
+        driver.x().onTrue(wrist.neutralRoll());
     }
 
     /**************/

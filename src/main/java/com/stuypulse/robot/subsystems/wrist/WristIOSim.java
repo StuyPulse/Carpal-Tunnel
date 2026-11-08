@@ -1,20 +1,19 @@
-/************************ PROJECT ZIXI ************************/
-/* Copyright (c) 2026 StuyPulse Robotics. All rights reserved.*/
-/* This work is licensed under the terms of the MIT license.  */
-/**************************************************************/
+/********************** PROJECT HIGHGROUND **********************/
+/* Copyright (c) 2026 StuyPulse Robotics. All rights reserved. */
+/* Use of this source code is governed by an MIT-style license */
+/* that can be found in the repository LICENSE file.           */
+/***************************************************************/
 package com.stuypulse.robot.subsystems.wrist;
 
-import static org.wpilib.units.Units.*;
+import static edu.wpi.first.units.Units.*;
 
 import com.stuypulse.robot.constants.GlobalSettings;
 import com.stuypulse.robot.subsystems.wrist.WristConstants.*;
 import com.stuypulse.robot.util.talonfx.sim.SystemSim;
 import com.stuypulse.robot.util.talonfx.sim.TalonFXSimulation;
-
-import org.wpilib.math.system.DCMotor;
-import org.wpilib.simulation.SingleJointedArmSim;
-import org.wpilib.units.measure.Angle;
-
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import org.littletonrobotics.junction.Logger;
 
 public class WristIOSim extends WristIOBase {
@@ -22,10 +21,51 @@ public class WristIOSim extends WristIOBase {
     private static final boolean FLIP_RIGHT_SIM = false;
 
     private final SystemSim<SingleJointedArmSim> simLeft;
-    private final TalonFXSimulation motorLeft;
-
     private final SystemSim<SingleJointedArmSim> simRight;
+
+    private final TalonFXSimulation motorLeft;
     private final TalonFXSimulation motorRight;
+
+    private WristIOSim(
+            TalonFXSimulation simMotorLeft,
+            TalonFXSimulation simMotorRight,
+            SystemSim<SingleJointedArmSim> simLeft,
+            SystemSim<SingleJointedArmSim> simRight) {
+        super(simMotorLeft, simMotorRight);
+
+        motorLeft = simMotorLeft;
+        motorRight = simMotorRight;
+
+        this.simLeft = simLeft;
+        this.simRight = simRight;
+    }
+
+    private WristIOSim(
+            SystemSim<SingleJointedArmSim> simLeft, SystemSim<SingleJointedArmSim> simRight) {
+        this(
+                new TalonFXSimulation(
+                        DeviceIDs.LEFT_MOTOR,
+                        FLIP_LEFT_SIM
+                                ? -WristSettings.WRIST_GEAR_RATIO
+                                : WristSettings.WRIST_GEAR_RATIO,
+                        simLeft),
+                new TalonFXSimulation(
+                        DeviceIDs.RIGHT_MOTOR,
+                        FLIP_RIGHT_SIM
+                                ? -WristSettings.WRIST_GEAR_RATIO
+                                : WristSettings.WRIST_GEAR_RATIO,
+                        simRight),
+                simLeft,
+                simRight);
+    }
+
+    public WristIOSim() {
+        // left = pitch + roll, right = pitch - roll (same mixing as WristIOImpl)
+        this(
+                makeMotorSim(WristSettings.WRIST_STOW_ANGLE.plus(WristSettings.WRIST_NEUTRAL_ROLL)),
+                makeMotorSim(
+                        WristSettings.WRIST_STOW_ANGLE.minus(WristSettings.WRIST_NEUTRAL_ROLL)));
+    }
 
     private static SystemSim<SingleJointedArmSim> makeMotorSim(Angle startAngle) {
         final double minAngle =
@@ -45,34 +85,6 @@ public class WristIOSim extends WristIOBase {
                         maxAngle,
                         false,
                         startAngle.in(Radians)));
-    }
-
-    public WristIOSim() {
-        final double gearRatio = WristSettings.WRIST_GEAR_RATIO;
-
-        // left = pitch + roll, right = pitch - roll (same mixing as WristIOImpl)
-        final Angle leftStart =
-                WristSettings.WRIST_STOW_ANGLE.plus(WristSettings.WRIST_NEUTRAL_ROLL);
-        final Angle rightStart =
-                WristSettings.WRIST_STOW_ANGLE.minus(WristSettings.WRIST_NEUTRAL_ROLL);
-
-        final SystemSim<SingleJointedArmSim> simLeft = makeMotorSim(leftStart);
-        final TalonFXSimulation motorLeft =
-                new TalonFXSimulation(
-                        DeviceIDs.LEFT_MOTOR, FLIP_LEFT_SIM ? -gearRatio : gearRatio, simLeft);
-
-        final SystemSim<SingleJointedArmSim> simRight = makeMotorSim(rightStart);
-        final TalonFXSimulation motorRight =
-                new TalonFXSimulation(
-                        DeviceIDs.RIGHT_MOTOR, FLIP_RIGHT_SIM ? -gearRatio : gearRatio, simRight);
-
-        super(motorLeft, motorRight);
-
-        this.simLeft = simLeft;
-        this.motorLeft = motorLeft;
-
-        this.simRight = simRight;
-        this.motorRight = motorRight;
     }
 
     @Override

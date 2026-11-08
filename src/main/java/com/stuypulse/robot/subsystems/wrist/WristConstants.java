@@ -1,21 +1,19 @@
-/************************ PROJECT ZIXI ************************/
-/* Copyright (c) 2026 StuyPulse Robotics. All rights reserved.*/
-/* This work is licensed under the terms of the MIT license.  */
-/**************************************************************/
+/********************** PROJECT HIGHGROUND **********************/
+/* Copyright (c) 2026 StuyPulse Robotics. All rights reserved. */
+/* Use of this source code is governed by an MIT-style license */
+/* that can be found in the repository LICENSE file.           */
+/***************************************************************/
 package com.stuypulse.robot.subsystems.wrist;
 
-import static org.wpilib.units.Units.*;
-
-import com.stuypulse.robot.util.talonfx.config.TalonFXConfig;
-
-import org.wpilib.simulation.SingleJointedArmSim;
-import org.wpilib.units.measure.*;
+import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
-
+import com.stuypulse.robot.util.talonfx.config.TalonFXConfig;
+import edu.wpi.first.units.measure.*;
+import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 
 interface WristConstants {
@@ -30,16 +28,16 @@ interface WristConstants {
         Angle ROLL_MIN = Degrees.of(-180.0);
         Angle ROLL_MAX = Degrees.of(180.0);
 
-        // SIM
+        // SIM (placeholder values, replace with real numbers from CAD)
         Angle WRIST_PITCH_MIN_ANGLE = Degrees.of(0.0);
-        Angle WRIST_ROLL_MAX_ANGLE = Degrees.of(0.0);
-        Angle WRIST_PITCH_MAX_ANGLE = Degrees.of(0.0);
-        Distance WRIST_ARM_LENGTH = Meters.of(0.0);
-        Mass WRIST_MASS = Kilograms.of(0.0);
+        Angle WRIST_ROLL_MAX_ANGLE = Degrees.of(90.0);
+        Angle WRIST_PITCH_MAX_ANGLE = Degrees.of(90.0);
+        Distance WRIST_ARM_LENGTH = Meters.of(0.2);
+        Mass WRIST_MASS = Kilograms.of(1.0);
         MomentOfInertia WRIST_MOI =
                 KilogramSquareMeters.of(
                         SingleJointedArmSim.estimateMOI(
-                                WRIST_MASS.in(Kilograms), WRIST_ARM_LENGTH.in(Meters)));
+                                WRIST_ARM_LENGTH.in(Meters), WRIST_MASS.in(Kilograms)));
 
         double WRIST_GEAR_RATIO = 1.0;
     }

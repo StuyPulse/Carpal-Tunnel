@@ -43,8 +43,8 @@ interface WristConstants {
     }
 
     public interface DeviceIDs {
-        int LEFT_MOTOR = 1;
-        int RIGHT_MOTOR = 2;
+        int LEFT_MOTOR = 21;
+        int RIGHT_MOTOR = 30;
     }
 
     public interface WristGains {
